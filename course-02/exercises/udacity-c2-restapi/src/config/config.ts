@@ -1,7 +1,3 @@
-// "host": "udagramchendev.cufqdj1wl2rb.us-east-2.rds.amazonaws.com"
-// "aws_region": "us-east-2"
-// "aws_profile": "default"
-// "aws_media_bucket": "udagram-chen-dev"
 export const config = {
   "dev": {
     "username": process.env.POSTGRESS_USERNAME,
@@ -22,5 +18,8 @@ export const config = {
     "aws_region": "",
     "aws_profile": "",
     "aws_media_bucket": ""
+  },
+  "jwt": {
+    "secret": process.env.JWT_SECRET
   }
 }
