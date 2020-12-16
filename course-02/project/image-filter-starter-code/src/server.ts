@@ -32,7 +32,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     // Get URL
     let imageURL = req.query.image_url;
     // Filter and write temp file
-    let filteredpath = await filterImageFromURL(imageURL);
+    let filteredpath = await filterImageFromURL(imageURL, res);
     // Send temp file in response
     res.sendFile(filteredpath, (err) => {
       // This will be called AFTER the response is sent
