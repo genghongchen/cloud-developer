@@ -31,10 +31,16 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   app.get( "/filteredimage", async ( req, res ) => {
     // Get URL
     let imageURL = req.query.image_url;
-    // Filter and write temp file
+    // 1. validate the image_url query
+    // This is done inside filterImageFromURL()
+    // By catching error there
+    // We can handle all error cases when reading files
+    // Not limited to invalid query or URL
+    // 2. call filterImageFromURL(image_url) to filter the image
     let filteredpath = await filterImageFromURL(imageURL, res);
-    // Send temp file in response
+    // 3. send the resulting file in the response
     res.sendFile(filteredpath, (err) => {
+      // 4. deletes any files on the server on finish of the response
       // This will be called AFTER the response is sent
       // Now it is OK to delete temp file
       deleteLocalFiles([filteredpath]);
