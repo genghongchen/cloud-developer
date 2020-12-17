@@ -1,3 +1,5 @@
+import express from 'express';
+import bodyParser from 'body-parser';
 import fs from 'fs';
 import Jimp = require('jimp');
 
@@ -8,12 +10,15 @@ import Jimp = require('jimp');
 //    inputURL: string - a publicly accessible url to an image file
 // RETURNS
 //    an absolute path to a filtered image locally saved file
-export async function filterImageFromURL(inputURL: string, res: Response): Promise<string>{
+export async function filterImageFromURL(inputURL: string, res: Response|any): Promise<string>{
     return new Promise( async resolve => {
-        const photo = await Jimp.read(inputURL).catch(e => { 
-            console.log("Image File Not Found!");
-            res.status(404).send("Image File Not Found!");
-        });
+        let photo: Jimp;
+        try {
+            photo = await Jimp.read(inputURL);
+        } catch (error) {
+            console.log("Image not found!");
+            res.status(404).send("Image not found!");
+        }
         const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
         try { 
             await photo
