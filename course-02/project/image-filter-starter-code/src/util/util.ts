@@ -11,6 +11,7 @@ import Jimp = require('jimp');
 export async function filterImageFromURL(inputURL: string, res: Response|any): Promise<string>{
     return new Promise( async resolve => {
         let photo: Jimp;
+        // 1. validate the image_url query
         try {
             photo = await Jimp.read(inputURL);
         } catch (error) {
