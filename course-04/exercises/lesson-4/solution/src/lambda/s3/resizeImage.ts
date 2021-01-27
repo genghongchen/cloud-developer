@@ -32,6 +32,7 @@ async function processImage(record: S3EventRecord) {
     .promise()
 
   const body = response.Body
+  // @ts-ignore Type Mismatch
   const image = await Jimp.read(body)
 
   console.log('Resizing image')
