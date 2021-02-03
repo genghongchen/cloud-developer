@@ -44,7 +44,7 @@ export async function DeleteTodo(todoId: string, userId: string): Promise<string
     return await todoAccess.DeleteTodo(todoId, userId)
 }
 
-export async function GenerateUploadUrl(todoId: string): Promise<string>{
+export async function GenerateUploadUrl(todoId: string, userId: string): Promise<string>{
     logger.info('GenerateUploadUrl() invoked.')
-    return await todoAccess.GenerateUploadUrl(todoId)
+    return await todoAccess.GenerateUploadUrl(todoId, userId)
 }

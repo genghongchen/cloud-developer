@@ -5,6 +5,7 @@ import { GenerateUploadUrl } from '../../businessLogic/todos'
 import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { createLogger } from '../../utils/logger';
+import { getUserId } from '../utils'
 
 const logger = createLogger ('Generate Upload URLs')
 
@@ -13,8 +14,9 @@ export const handler =  middy(
     try{
       logger.info('Processing event: ', event)
       const todoId = event.pathParameters.todoId
+      const userId = getUserId(event)
       // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-      const signedUploadUrl = await GenerateUploadUrl(todoId)
+      const signedUploadUrl = await GenerateUploadUrl(todoId, userId)
 
       return {
         statusCode: 200,

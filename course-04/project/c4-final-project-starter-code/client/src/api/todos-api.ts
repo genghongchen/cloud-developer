@@ -28,8 +28,6 @@ export async function createTodo(
     }
   })
 
-  console.log(response.data.newItem)
-
   return response.data.newItem
 }
 
