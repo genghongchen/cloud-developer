@@ -34,17 +34,17 @@ export class TodoAccess {
 
     async CreateTodo (todoItem: TodoItem): Promise<TodoItem> {
       logger.info('Create a new todo item...')
-      const newTodoItem = {
-        ...todoItem,
-        attachmentUrl: `https://${this.bucketName}.s3.amazonaws.com/${todoItem.todoId}`
-      }
+      // const newTodoItem = {
+      //  ...todoItem,
+      //  attachmentUrl: `https://${this.bucketName}.s3.amazonaws.com/${todoItem.todoId}`
+      // }
 
       await this.docClient.put({
           TableName: this.todosTable,
-          Item: newTodoItem
+          Item: todoItem
       }).promise()
 
-      return newTodoItem
+      return todoItem
     }
 
     async UpdateTodo (todoItem: TodoItem): Promise<string> {      
@@ -90,8 +90,24 @@ export class TodoAccess {
       return userId
     }
 
-    async GenerateUploadUrl (todoId: string): Promise<string> {
+    async GenerateUploadUrl (todoId: string, userId: string): Promise<string> {
       logger.info(`Generating an upload url for item ID: ${todoId}`)
+
+      await this.docClient.update({
+        TableName: this.todosTable,
+        Key:{
+          "userId": userId,
+          "todoId": todoId
+        },
+        ConditionExpression: "todoId = :todoId",
+        UpdateExpression: "set attachmentUrl = :attachmentUrl",
+        ExpressionAttributeValues: {
+          ":todoId" : todoId,
+          ":attachmentUrl" : `https://${this.bucketName}.s3.amazonaws.com/${todoId}`
+        },
+        ReturnValues: "UPDATED_NEW"
+      }).promise()
+
       return this.s3.getSignedUrl('putObject', {
         Bucket: this.bucketName,
         Key: todoId,
